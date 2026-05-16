@@ -472,7 +472,9 @@ std::string Program::Disassemble() const
 			auto found = std::find( begin( floatConsts ), end( floatConsts ), i );
 			if( found != end( floatConsts ) )
 			{
-				constOs << "  float " << *reinterpret_cast<const float*>( m_code.data() + i ) << std::endl;
+				float f;
+				memcpy( &f, m_code.data() + i, sizeof( float ) );
+				constOs << "  float " << f << std::endl;
 				i += PadSize( sizeof( float ) );
 				continue;
 			}
