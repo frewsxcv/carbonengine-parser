@@ -171,7 +171,7 @@ expr(A) ::= OP_ID(N) OP_LEFT_PAR OP_RIGHT_PAR.
 
 expr(A) ::= OP_ID(N) OP_LEFT_PAR OP_STRING_CONST(B) OP_COMA arguments(C) OP_RIGHT_PAR.
 {
-    if (C->offset + 1 < MAX_FUNCTION_ARGUMENTS)
+    if (C->offset < MAX_FUNCTION_ARGUMENTS)
     {
         for (size_t i = C->offset; i > 0; --i)
         {

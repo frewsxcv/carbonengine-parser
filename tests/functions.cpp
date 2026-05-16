@@ -47,6 +47,13 @@ float stest1( const char* str, float x )
 		return x - 1;
 	}
 }
+
+std::string stest7Arg;
+float stest7( const char* str, float a, float b, float c, float d, float e, float f, float g )
+{
+	stest7Arg = str;
+	return a + b + c + d + e + f + g;
+}
 }
 
 TEST( Functions, CanCallFunctionWithNoArgs )
@@ -183,6 +190,17 @@ TEST( Functions, EvaluatesPureFunctionsWithStringArgOnParse )
 	std::unique_ptr<uint8_t> arena( new uint8_t[program.GetTempArenaSize()] );
 	ASSERT_EQ( 122.f, program.Eval( nullptr, arena.get() ) );
 	ASSERT_FALSE( stest1Called );
+}
+
+TEST( Functions, CanCallStringArgFunctionAtMaxArity )
+{
+	// A function with a string parameter plus 7 float parameters fills
+	// MAX_FUNCTION_ARGUMENTS exactly. Pre-fix the grammar rule for
+	// string-arg calls dropped the string at this boundary, so the call
+	// failed to find a matching overload and the parse failed entirely.
+	stest7Arg.clear();
+	ASSERT_EQ( 28.f, TestEval( "t(\"hello\", 1, 2, 3, 4, 5, 6, 7)", {}, { Function( "t", &stest7 ) } ) );
+	ASSERT_EQ( "hello", stest7Arg );
 }
 
 TEST( Functions, CanUseStandardFunctions )
