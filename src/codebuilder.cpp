@@ -84,7 +84,9 @@ Register CodeBuilder::AddConst( float constant )
 {
 	for( uint32_t offset = 0; offset + CONST_ALIGNMENT <= uint32_t( m_constData.size() ); offset += CONST_ALIGNMENT )
 	{
-		if( *reinterpret_cast<float*>( m_constData.data() + offset ) == constant )
+		float candidate;
+		memcpy( &candidate, m_constData.data() + offset, sizeof( float ) );
+		if( candidate == constant )
 		{
 			return Register{ offset, Register::CONST };
 		}
