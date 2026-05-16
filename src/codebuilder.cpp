@@ -155,6 +155,7 @@ void CodeBuilder::ResolveAddr( size_t offset )
 
 Register CodeBuilder::AllocateTemp()
 {
+	assert( m_availableTemps != 0 && "temp register pool exhausted" );
 	auto idx = BitScan( m_availableTemps );
 	m_availableTemps &= ~( uint64_t( 1 ) << idx );
 
